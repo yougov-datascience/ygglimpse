@@ -11,8 +11,8 @@ import random
 import argparse
 import os
 import json
-import custom_datasets
-from model import load_tokenizer, load_model
+import scripts.custom_datasets
+from scripts.model import load_tokenizer, load_model
 
 
 def save_data(output_file, args, data):
@@ -238,38 +238,6 @@ def generate_data(args, dataset, key):
 
     return data_builder.generate_samples(data[:args.n_samples], batch_size=args.batch_size)
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--output_file', type=str, default="./exp_gpt3/data/xsum_gpt2")
-    parser.add_argument('--dataset', type=str, default="xsum")
-    parser.add_argument('--n_samples', type=int, default=200)
-    parser.add_argument('--openai_base', type=str, default=None)
-    parser.add_argument('--openai_key', type=str, default=None)
-    parser.add_argument('--openai_model', type=str, default=None)  # davinci, gpt-3.5-turbo, gpt-4
-    parser.add_argument('--base_model_name', type=str, default="gpt2")
-    parser.add_argument('--batch_size', type=int, default=50)
-    parser.add_argument('--do_top_k', action='store_true')
-    parser.add_argument('--top_k', type=int, default=40)
-    parser.add_argument('--do_top_p', action='store_true')
-    parser.add_argument('--top_p', type=float, default=0.96)
-    parser.add_argument('--do_temperature', action='store_true')
-    parser.add_argument('--temperature', type=float, default=0.8)
-    parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--device', type=str, default="cuda")
-    parser.add_argument('--cache_dir', type=str, default="../cache")
-    args = parser.parse_args()
 
-    os.environ["XDG_CACHE_HOME"] = args.cache_dir
-    if not os.path.exists(args.cache_dir):
-        os.makedirs(args.cache_dir)
-    print(f"Using cache dir {args.cache_dir}")
 
-    random.seed(args.seed)
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed)
 
-    print(f'Loading dataset {args.dataset}...')
-    dataset_keys = {'xsum': 'document', 'squad': 'context', 'writing': 'document'}
-    data = generate_data(args, args.dataset, dataset_keys[args.dataset] if args.dataset in dataset_keys else None)
-
-    save_data(args.output_file, args, data)

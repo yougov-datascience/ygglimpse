@@ -6,7 +6,7 @@ import os
 import random
 import numpy as np
 import torch
-from mlp_distribution_model import MlpDistributionModel
+from scripts.mlp_distribution_model import MlpDistributionModel
 
 
 def safe_log(prob):

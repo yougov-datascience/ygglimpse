@@ -8,8 +8,8 @@ import torch.nn.functional as F
 from math import floor
 import tqdm
 import argparse
-from data_builder import load_data
-from model import load_tokenizer, load_model
+from scripts.data_builder import load_data
+from scripts.model import load_tokenizer, load_model
 
 
 def safe_log(prob):
@@ -186,3 +186,4 @@ if __name__ == '__main__':
     model = MlpDistributionModel(args.max_topk, args.rank_size)
     model.move_to(args.device)
     model.train(data_train, data_valid, args.model_file)
+

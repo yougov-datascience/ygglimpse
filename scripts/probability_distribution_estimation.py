@@ -9,9 +9,9 @@ import tqdm
 import argparse
 import json
 import time
-from data_builder import load_data, save_data
-from metrics import get_roc_metrics, get_precision_recall_metrics
-from probability_distributions import GeometricDistribution, ZipfianDistribution, MlpDistribution
+from scripts.data_builder import load_data, save_data
+from scripts.metrics import get_roc_metrics, get_precision_recall_metrics
+from scripts.probability_distributions import GeometricDistribution, ZipfianDistribution, MlpDistribution
 
 
 class OpenAIGPT:
@@ -252,7 +252,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset_file', type=str, default="./exp_test/data/xsum_gpt-3.5-turbo")
     parser.add_argument('--scoring_model_name', type=str, default='davinci-002')
     parser.add_argument('--api_base', type=str, default='https://xxxx.openai.azure.com/')
-    parser.add_argument('--api_key', type=str, default='xxxxxxxx')
+    parser.add_argument('--api_key', type=str, default=os.environ["OPENAI_API_KEY"])
     parser.add_argument('--api_version', type=str, default='2023-09-15-preview')
     parser.add_argument('--estimator', type=str, default='geometric', choices=['geometric', 'zipfian', 'mlp'])
     parser.add_argument('--prompt', type=str, default='prompt3', choices=['prompt0', 'prompt1', 'prompt2', 'prompt3', 'prompt4'])
@@ -263,3 +263,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     experiment(args)
+

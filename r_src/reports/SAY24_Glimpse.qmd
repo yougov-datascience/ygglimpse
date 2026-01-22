@@ -1,0 +1,203 @@
+---
+title: "SAY24 LLM Zero-Shot Analysis using Glimpse"
+author: "YouGov Data Science"
+format: html
+editor: visual
+---
+
+## Abstract
+
+Open end responses provided to the May 2025 SAY24 survey effort have been analysed using Glimpse, an open source python based package avaliable on Github. Glimpse is a tool that follows the methods in outlined in 'Glimpse: Enabling White-Box Methods to Use Proprietary Models for Zero-Shot LLM-Generated Text Detection' (Bao, et al., 2025). All open-end questions are passed through the Glimpse detection model, with modifications aimed at multi-response analysis. The final output is a data frame containing the probability of machine generation (AI generated). Further exploritory analysis using the glimpse model is included to see the variance in results of single response strings (isolated) versus a concatination of all responses provided by an individual (grouped). Both results are averaged to provide a final probability of machine generation.
+
+## Introduction
+
+Zero shot models for LLM text detection are an attempt to produce clear, quantifiable results when analyzing open end responses without requirement of extensive model training. An introductory statement provided by s Bao, et al. 2025:
+
+"Glimpse serves as a bridge between white-box methods, which rely on local LLMs for scoring, and proprietary LLMs. It estimates full distributions based on partial observations from API-based models. Our empirical analysis demonstrates that detection methods leveraging these estimated distributions **achieve detection accuracies comparable to those obtained using real distributions**."
+
+At YouGov panelists are compensated for their honest participation in our surveys. As a result, it is in our best interest to explore and develop as many tools as possible for intercepting fraudulent behavior. Here we explore the Glimpse package (Bao, et al., 2025) as another facet in YouGov's fraud defense.
+
+## Methodology
+
+All modifications to the base Glimpse package have been related to input and output of large datasets. The base Glimpse model has not currently be altered and full explaination (whitebox) of the Glimpse methodology can be found in Bao, et al. 2025.
+
+The Davinci-002 LLM model from OpenAI is used with the following settings provided to Glimpse:
+
+```{r}
+# args = argparse.Namespace(
+#     scoring_model_name="davinci-002",
+#     api_base="https://api.openai.com/v1",
+#     api_key=os.environ["OPENAI_API_KEY"],
+#     api_version="2023-09-15-preview",
+#     estimator="geometric",
+#     prompt="prompt3",
+#     rank_size=1000,
+#     top_k=5,
+# )
+```
+
+#### local_batch_infer.py
+
+The modified function `local_batch_infer.py` is based on `local_infer.py` in the Glimpse package produced by Bao, et al., 2025. It allows for a specified pandas data frame (`df`), a specified response column (`text`) and standard suite of arguments (`args`) to step through each row and output the results of the Glimpse function analysis. The output contains appended columns `prob_machine_generated`, `n_tokens`, and `glimpse_criterion`.
+
+The initial data set given to `local_batch_infer.py` is generated in R, distilling any open-ended responses into a concise `question` and `response` frame for analysis. Using the SAY24 survey results the following OE questions were acquired:
+
+NOTE: pid = political id, or self identified party affiliation
+
+-   "why_moved_to_current_state"
+
+-   "why_think_pid"
+
+-   "why_are_pid"
+
+-   "when_think_pid"
+
+-   "why_think_pid_with_when"
+
+-   "when_decided_pid"
+
+-   "why_are_pid_with_when"
+
+Not all participants responded to (or may have not been asked) all open-end questions listed here. The initial SAY24 data set used here is anyone who provided at least one (1) response to any of these questions.
+
+#### runner_PYside.py
+
+This script is used to gather the results from `local_batch_infer.py` into a final output table. It pulls from `/py_fodder`, which contains .csv files of OE response vectors for each OE question, and returns the appended data frame of that single question. These results are saved to `/r_src/py_results/` .
+
+#### runner_Rside.R
+
+To pull the results together into a clean data frame, files saved to `/r_src/py_results` are then pulled into R for easier manipulation. Here the final table is prepared, and additional exploratory columns are created before sending them back through the glimpse model to evaluate the grouped text string (`full_text`).
+
+Essentially, all cleaning and preparation tasks are preformed in R, and anything that needs passed through the Glimpse model is processed with Python.
+
+After two rounds of `local_batch_infer.py`, the final output is saved to `r_src/outputs/`. It contains the following columns:\
+`person_id`, `question`, `text`, `prob_machine_generated`, `n_tokens`, `glimpse_criterion`, `full_text`, `prob_machine_generated_full`, `n_tokens_full`, `glimpse_criterion_full`, and `final_avg`.
+
+## Results
+
+Looking at the distribution of `final_score` we see and average of .30 (30%) chance of machine generation across all participants that responded at least once. 99.5% of all participants have a less than 75% chance of being machine generated, indicating a low incidence rate of machine generation responses during this wave.
+
+#### Histogram
+
+```{r,message=F,warning=F,echo=F}
+library(dplyr)
+library(readr)
+library(kableExtra)
+library(ggplot2)
+
+final <- read_csv("../py_results/final_out.csv") |>
+  mutate(
+    final_score = round((prob_machine_generated+prob_machine_generated_full)/2, 2)
+  )
+
+final_unique <- final |>
+  group_by(person_id) |>
+  select(person_id, final_score) |>
+  unique()
+
+# Summary stats
+avg_avg <- mean(final_unique$final_score, na.rm = TRUE)
+
+peeps <- length(unique(final_unique$person_id))
+
+pct_over_75 <- mean(final_unique$final_score >= .75, na.rm = TRUE) * 100
+n_over_75   <- sum(final_unique$final_score >= .75, na.rm = TRUE)
+
+ggplot(final_unique, aes(x = final_score)) +
+
+  # Base histogram
+  geom_histogram(
+    binwidth = .05,
+    boundary = 0,
+    fill = "#29CDCA",
+    color = "white",
+    alpha = 0.6
+  ) +
+
+  # Highlight +75% instances
+  geom_histogram(
+    data = subset(final_unique, final_score >= .75),
+    binwidth = .05,
+    boundary = 0,
+    fill = "#EA5094",
+    color = "white",
+    alpha = 0.85
+  ) +
+
+  # Average WPM
+  geom_vline(
+    xintercept = avg_avg,
+    color = "#EA5094",
+    linewidth = 0.4
+  ) +
+
+  # Threshold line (High prob)
+  geom_vline(
+    xintercept = .75,
+    color = "#EA5094",
+    linetype = "dashed",
+    linewidth = 0.6
+  ) +
+
+  # Average annotation
+  annotate(
+    "text",
+    x = avg_avg,
+    y = Inf,
+    label = paste0("Avg Final Score = ", round(avg_avg, 1)),
+    vjust = 1.4,
+    hjust = -0.1,
+    color = "#712F89",
+    size = 3.0
+  ) +
+
+  # % over threshold annotation
+  annotate(
+    "text",
+    x = .71,
+    y = Inf,
+    label = paste0(
+      round(pct_over_75, 1),"% of all participants
+(n = ", n_over_75, ")  ≥ .75 probability
+ of machine generation"
+    ),
+    vjust = 3,
+    hjust = -0.3,
+    color = "#712F89",
+    size = 3.5
+  ) +
+
+  labs(
+    x = "Final Score",
+    y = "Count",
+    title = "Distribution of Glimpse Final Score",
+    subtitle = paste0("n = ", peeps, " unique participants providing to at least one (1) open-end response.")
+  ) +
+
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.line.x        = element_line(color = "black"),
+    axis.line.y        = element_line(color = "black"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+```
+
+#### Output Table Preview 
+
+This table contains the first 100 rows of the final output table (n = 12288).
+
+```{r table, warning=F,message=F,echo=F}
+
+head(final, n = 100) |>
+  kable(
+    format = "html",
+    align = c("l"),
+    caption = "2025 SAY24 Glimpse Analysis",
+    table.attr = 'class="text-wrap"'
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "responsive"),
+    full_width = FALSE
+  )
+```

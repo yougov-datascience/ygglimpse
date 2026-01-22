@@ -10,9 +10,9 @@ import os
 import glob
 import argparse
 import json
-from model import load_tokenizer, load_model
-from probability_distributions import GeometricDistribution
-from probability_distribution_estimation import OpenAIGPT, PdeFastDetectGPT
+from scripts.model import load_tokenizer, load_model
+from scripts.probability_distributions import GeometricDistribution
+from scripts.probability_distribution_estimation import OpenAIGPT, PdeFastDetectGPT
 from scipy.stats import norm
 
 
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # use davinci-002 for better detection accuracy
     parser.add_argument('--scoring_model_name', type=str, default='davinci-002')
     parser.add_argument('--api_base', type=str, default='https://api.openai.com/v1')
-    parser.add_argument('--api_key', type=str, default='xxxxxxxx')
+    parser.add_argument('--api_key', type=str, default=os.environ["OPENAI_API_KEY"])
     parser.add_argument('--api_version', type=str, default='2023-09-15-preview')
     parser.add_argument('--estimator', type=str, default='geometric', choices=['geometric', 'zipfian', 'mlp'])
     parser.add_argument('--prompt', type=str, default='prompt3', choices=['prompt0', 'prompt1', 'prompt2', 'prompt3', 'prompt4'])
