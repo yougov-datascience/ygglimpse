@@ -46,8 +46,8 @@ def glimpse_fulltext(
     text_col: str,
     args,
     prob_col: str = "prob_machine_generated_full",
-    token_col: str = "n_tokens2_full",
-    crit_col: str = "glimpse_criterion2_full"
+    token_col: str = "n_tokens_full",
+    crit_col: str = "glimpse_criterion_full"
     ):
     
     detector = Glimpse(args)

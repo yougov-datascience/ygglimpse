@@ -53,3 +53,5 @@ df7.to_csv("./r_src/py_results/when_decided_pid.csv", index=False)
 
 out1 = pd.read_csv("./py_fodder/out1.csv")
 outdf = glimpse_fulltext(out1, "full_text", args)
+
+outdf.to_csv("./r_src/py_results/final_out.csv")
