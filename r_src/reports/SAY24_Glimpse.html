@@ -113,11 +113,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Zero shot models for LLM text detection are an attempt to produce clear, quantifiable results when analyzing open end responses without requirement of extensive model training. An introductory statement provided by s Bao, et al.&nbsp;2025:</p>
 <p>“Glimpse serves as a bridge between white-box methods, which rely on local LLMs for scoring, and proprietary LLMs. It estimates full distributions based on partial observations from API-based models. Our empirical analysis demonstrates that detection methods leveraging these estimated distributions <strong>achieve detection accuracies comparable to those obtained using real distributions</strong>.”</p>
-<p>At YouGov panelists are compensated for their honest participation in our surveys. As a result, it is in our best interest to explore and develop as many tools as possible for intercepting fraudulent behavior. Here we explore the Glimpse package (Bao, et al., 2025) as another facet in YouGov’s fraud defense.</p>
+<p>In short, methods such as Entropy, Rank, Log-Rank, and Fast-DetectGPT are passed to proprietary models in order to detect the probability that the LLM itself would generate a given response (Bao, et al.&nbsp;2025).</p>
 </section>
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<p>All modifications to the base Glimpse package have been related to input and output of large datasets. The base Glimpse model has not currently be altered and full explaination (whitebox) of the Glimpse methodology can be found in Bao, et al.&nbsp;2025.</p>
+<p>All modifications to the base Glimpse package have been related to input and output of large datasets. The base Glimpse model has not been altered and a full explanation of the Glimpse methodology can be found in Bao, et al.&nbsp;2025.</p>
 <p>The Davinci-002 LLM model from OpenAI is used with the following settings provided to Glimpse:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># args = argparse.Namespace(</span></span>
@@ -161,7 +161,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>Looking at the distribution of <code>final_score</code> we see and average of .30 (30%) chance of machine generation across all participants that responded at least once. 99.5% of all participants have a less than 75% chance of being machine generated, indicating a low incidence rate of machine generation responses during this wave.</p>
+<p>Looking at the distribution of <code>final_score</code> we see and average of .30 (30%) chance of machine generation across all participants that responded at least once. 99.5% of all participants have a less than 75% chance of being machine generated, indicating a low incidence rate of machine generation responses during this wave. Considering the possibility that some participants are well articulated* enough to create false positives for this approach, we can infer that we are within the bounds of low fraud risk for this wave.</p>
+<p>* The model is based on tokenization probabilities, not the grammar used by the respondent. There is a correlation between these</p>
 <section id="histogram" class="level4">
 <h4 class="anchored" data-anchor-id="histogram">Histogram</h4>
 <div class="cell">
@@ -176,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="output-table-preview" class="level4">
 <h4 class="anchored" data-anchor-id="output-table-preview">Output Table Preview</h4>
-<p>This table contains the first 100 rows of the final output table (n = 12288).</p>
+<p>This table contains the first 50 rows of the final output table (n = 12288 responses).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div class="table-responsive">
@@ -210,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Family Not democrat</td>
 <td style="text-align: left;">0.79</td>
 <td style="text-align: left;">4</td>
-<td style="text-align: left;">-10.3918344</td>
+<td style="text-align: left;">-10.391834</td>
 <td style="text-align: left;">0.52</td>
 </tr>
 <tr class="even">
@@ -224,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Family Not democrat</td>
 <td style="text-align: left;">0.79</td>
 <td style="text-align: left;">4</td>
-<td style="text-align: left;">-10.3918344</td>
+<td style="text-align: left;">-10.391834</td>
 <td style="text-align: left;">0.53</td>
 </tr>
 <tr class="odd">
@@ -238,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Republican</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">1</td>
-<td style="text-align: left;">-5.2738498</td>
+<td style="text-align: left;">-5.273850</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="even">
@@ -252,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Because I care about other people.</td>
 <td style="text-align: left;">0.33</td>
 <td style="text-align: left;">7</td>
-<td style="text-align: left;">-2.6544328</td>
+<td style="text-align: left;">-2.654433</td>
 <td style="text-align: left;">0.33</td>
 </tr>
 <tr class="odd">
@@ -266,7 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Logic, reason, facts, historical perspective Job</td>
 <td style="text-align: left;">0.26</td>
 <td style="text-align: left;">10</td>
-<td style="text-align: left;">-6.7321917</td>
+<td style="text-align: left;">-6.732192</td>
 <td style="text-align: left;">0.28</td>
 </tr>
 <tr class="even">
@@ -280,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Logic, reason, facts, historical perspective Job</td>
 <td style="text-align: left;">0.26</td>
 <td style="text-align: left;">10</td>
-<td style="text-align: left;">-6.7321917</td>
+<td style="text-align: left;">-6.732192</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="odd">
@@ -294,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Own property I have the same believes, morals</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">10</td>
-<td style="text-align: left;">-7.9062516</td>
+<td style="text-align: left;">-7.906252</td>
 <td style="text-align: left;">0.32</td>
 </tr>
 <tr class="even">
@@ -308,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Own property I have the same believes, morals</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">10</td>
-<td style="text-align: left;">-7.9062516</td>
+<td style="text-align: left;">-7.906252</td>
 <td style="text-align: left;">0.34</td>
 </tr>
 <tr class="odd">
@@ -322,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">The first time I voted. Because I want every bidy to be treated like everyone else.</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">20</td>
-<td style="text-align: left;">-5.1156592</td>
+<td style="text-align: left;">-5.115659</td>
 <td style="text-align: left;">0.35</td>
 </tr>
 <tr class="even">
@@ -336,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">The first time I voted. Because I want every bidy to be treated like everyone else.</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">20</td>
-<td style="text-align: left;">-5.1156592</td>
+<td style="text-align: left;">-5.115659</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="odd">
@@ -350,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Trump</td>
 <td style="text-align: left;">0.26</td>
 <td style="text-align: left;">1</td>
-<td style="text-align: left;">-3.4707534</td>
+<td style="text-align: left;">-3.470753</td>
 <td style="text-align: left;">0.26</td>
 </tr>
 <tr class="even">
@@ -364,7 +365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Military move</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">2</td>
-<td style="text-align: left;">-6.3107151</td>
+<td style="text-align: left;">-6.310715</td>
 <td style="text-align: left;">0.24</td>
 </tr>
 <tr class="odd">
@@ -378,7 +379,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Because Democrats are worthless. Parents relocated when I was a child</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">13</td>
-<td style="text-align: left;">-7.9444211</td>
+<td style="text-align: left;">-7.944421</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="even">
@@ -392,7 +393,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Because Democrats are worthless. Parents relocated when I was a child</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">13</td>
-<td style="text-align: left;">-7.9444211</td>
+<td style="text-align: left;">-7.944421</td>
 <td style="text-align: left;">0.32</td>
 </tr>
 <tr class="odd">
@@ -406,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">1980s Democrats more humanist, Rs increasingly focused on a twisted version of Christianity. And that’s just the tip of the iceberg. Partner’s job, to get out of Texas</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">39</td>
-<td style="text-align: left;">-5.4328189</td>
+<td style="text-align: left;">-5.432819</td>
 <td style="text-align: left;">0.38</td>
 </tr>
 <tr class="even">
@@ -420,7 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">1980s Democrats more humanist, Rs increasingly focused on a twisted version of Christianity. And that’s just the tip of the iceberg. Partner’s job, to get out of Texas</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">39</td>
-<td style="text-align: left;">-5.4328189</td>
+<td style="text-align: left;">-5.432819</td>
 <td style="text-align: left;">0.24</td>
 </tr>
 <tr class="odd">
@@ -434,7 +435,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">1980s Democrats more humanist, Rs increasingly focused on a twisted version of Christianity. And that’s just the tip of the iceberg. Partner’s job, to get out of Texas</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">39</td>
-<td style="text-align: left;">-5.4328189</td>
+<td style="text-align: left;">-5.432819</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="even">
@@ -448,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Around 2015 when I graduated from high school and started to experience more of life as an adult. Their values and views are much more in line with my own.</td>
 <td style="text-align: left;">0.33</td>
 <td style="text-align: left;">35</td>
-<td style="text-align: left;">-2.5986427</td>
+<td style="text-align: left;">-2.598643</td>
 <td style="text-align: left;">0.36</td>
 </tr>
 <tr class="odd">
@@ -462,7 +463,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Around 2015 when I graduated from high school and started to experience more of life as an adult. Their values and views are much more in line with my own.</td>
 <td style="text-align: left;">0.33</td>
 <td style="text-align: left;">35</td>
-<td style="text-align: left;">-2.5986427</td>
+<td style="text-align: left;">-2.598643</td>
 <td style="text-align: left;">0.53</td>
 </tr>
 <tr class="even">
@@ -476,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">After the last 2 elections I realized both sides are equally as hypocritical as each other. Both sides only try to serve their own interests not he interests of the people Parents wanted to come back to the US</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">44</td>
-<td style="text-align: left;">-3.9195987</td>
+<td style="text-align: left;">-3.919599</td>
 <td style="text-align: left;">0.38</td>
 </tr>
 <tr class="odd">
@@ -490,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">After the last 2 elections I realized both sides are equally as hypocritical as each other. Both sides only try to serve their own interests not he interests of the people Parents wanted to come back to the US</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">44</td>
-<td style="text-align: left;">-3.9195987</td>
+<td style="text-align: left;">-3.919599</td>
 <td style="text-align: left;">0.26</td>
 </tr>
 <tr class="even">
@@ -504,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">After the last 2 elections I realized both sides are equally as hypocritical as each other. Both sides only try to serve their own interests not he interests of the people Parents wanted to come back to the US</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">44</td>
-<td style="text-align: left;">-3.9195987</td>
+<td style="text-align: left;">-3.919599</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="odd">
@@ -518,7 +519,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Always</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">1</td>
-<td style="text-align: left;">-4.4134280</td>
+<td style="text-align: left;">-4.413428</td>
 <td style="text-align: left;">0.23</td>
 </tr>
 <tr class="even">
@@ -532,7 +533,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Always</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">1</td>
-<td style="text-align: left;">-4.4134280</td>
+<td style="text-align: left;">-4.413428</td>
 <td style="text-align: left;">0.23</td>
 </tr>
 <tr class="odd">
@@ -546,7 +547,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">I agree with their values</td>
 <td style="text-align: left;">0.31</td>
 <td style="text-align: left;">5</td>
-<td style="text-align: left;">-2.7746789</td>
+<td style="text-align: left;">-2.774679</td>
 <td style="text-align: left;">0.31</td>
 </tr>
 <tr class="even">
@@ -560,7 +561,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When I voted in the 2016 election. I was born in NY I oppose children being killed in schools and support common sense gun laws. I believe that more needs to be done to address climate change. I support the affordable care act and Medicaid expansion. I would like for the United States to join other developed nations and get universal healthcare in the future.</td>
 <td style="text-align: left;">0.36</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: left;">-2.3342485</td>
+<td style="text-align: left;">-2.334249</td>
 <td style="text-align: left;">0.38</td>
 </tr>
 <tr class="odd">
@@ -574,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When I voted in the 2016 election. I was born in NY I oppose children being killed in schools and support common sense gun laws. I believe that more needs to be done to address climate change. I support the affordable care act and Medicaid expansion. I would like for the United States to join other developed nations and get universal healthcare in the future.</td>
 <td style="text-align: left;">0.36</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: left;">-2.3342485</td>
+<td style="text-align: left;">-2.334249</td>
 <td style="text-align: left;">0.52</td>
 </tr>
 <tr class="even">
@@ -588,7 +589,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When I voted in the 2016 election. I was born in NY I oppose children being killed in schools and support common sense gun laws. I believe that more needs to be done to address climate change. I support the affordable care act and Medicaid expansion. I would like for the United States to join other developed nations and get universal healthcare in the future.</td>
 <td style="text-align: left;">0.36</td>
 <td style="text-align: left;">74</td>
-<td style="text-align: left;">-2.3342485</td>
+<td style="text-align: left;">-2.334249</td>
 <td style="text-align: left;">0.46</td>
 </tr>
 <tr class="odd">
@@ -602,7 +603,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Democrats lie and do not listen to their constituents! And, they stay if Congress way too long. They lie all the time and they have no respect to WE THE PEOPLE!! They keep their promises!! I was born in Florida</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">47</td>
-<td style="text-align: left;">-4.7266767</td>
+<td style="text-align: left;">-4.726677</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="even">
@@ -616,7 +617,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Democrats lie and do not listen to their constituents! And, they stay if Congress way too long. They lie all the time and they have no respect to WE THE PEOPLE!! They keep their promises!! I was born in Florida</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">47</td>
-<td style="text-align: left;">-4.7266767</td>
+<td style="text-align: left;">-4.726677</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="odd">
@@ -630,7 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Democrats lie and do not listen to their constituents! And, they stay if Congress way too long. They lie all the time and they have no respect to WE THE PEOPLE!! They keep their promises!! I was born in Florida</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">47</td>
-<td style="text-align: left;">-4.7266767</td>
+<td style="text-align: left;">-4.726677</td>
 <td style="text-align: left;">0.52</td>
 </tr>
 <tr class="even">
@@ -644,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Not sure Born here Freedom of speech and fiscal responsibility</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">12</td>
-<td style="text-align: left;">-7.9199841</td>
+<td style="text-align: left;">-7.919984</td>
 <td style="text-align: left;">0.38</td>
 </tr>
 <tr class="odd">
@@ -658,7 +659,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Not sure Born here Freedom of speech and fiscal responsibility</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">12</td>
-<td style="text-align: left;">-7.9199841</td>
+<td style="text-align: left;">-7.919984</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="even">
@@ -672,7 +673,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Not sure Born here Freedom of speech and fiscal responsibility</td>
 <td style="text-align: left;">0.37</td>
 <td style="text-align: left;">12</td>
-<td style="text-align: left;">-7.9199841</td>
+<td style="text-align: left;">-7.919984</td>
 <td style="text-align: left;">0.34</td>
 </tr>
 <tr class="odd">
@@ -686,7 +687,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">More to my. way of thinking For love of a man</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">13</td>
-<td style="text-align: left;">-5.7105300</td>
+<td style="text-align: left;">-5.710530</td>
 <td style="text-align: left;">0.24</td>
 </tr>
 <tr class="even">
@@ -700,7 +701,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">More to my. way of thinking For love of a man</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">13</td>
-<td style="text-align: left;">-5.7105300</td>
+<td style="text-align: left;">-5.710530</td>
 <td style="text-align: left;">0.32</td>
 </tr>
 <tr class="odd">
@@ -714,7 +715,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When tRump was elect Military MAGA has ruined everything, and the democrats are too nice. We need a third party.</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">29</td>
-<td style="text-align: left;">-4.4514558</td>
+<td style="text-align: left;">-4.451456</td>
 <td style="text-align: left;">0.27</td>
 </tr>
 <tr class="even">
@@ -728,7 +729,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When tRump was elect Military MAGA has ruined everything, and the democrats are too nice. We need a third party.</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">29</td>
-<td style="text-align: left;">-4.4514558</td>
+<td style="text-align: left;">-4.451456</td>
 <td style="text-align: left;">0.23</td>
 </tr>
 <tr class="odd">
@@ -742,7 +743,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">When tRump was elect Military MAGA has ruined everything, and the democrats are too nice. We need a third party.</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">29</td>
-<td style="text-align: left;">-4.4514558</td>
+<td style="text-align: left;">-4.451456</td>
 <td style="text-align: left;">0.46</td>
 </tr>
 <tr class="even">
@@ -756,7 +757,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">We care about the real American dream where anyone can get ahead, not just the rich. We cherish diversity, inclusion, love Born</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">27</td>
-<td style="text-align: left;">-4.9715090</td>
+<td style="text-align: left;">-4.971509</td>
 <td style="text-align: left;">0.31</td>
 </tr>
 <tr class="odd">
@@ -770,7 +771,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">We care about the real American dream where anyone can get ahead, not just the rich. We cherish diversity, inclusion, love Born</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">27</td>
-<td style="text-align: left;">-4.9715090</td>
+<td style="text-align: left;">-4.971509</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="even">
@@ -784,7 +785,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Forever They are saner than the dumbass democrats</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">12</td>
-<td style="text-align: left;">-5.7936114</td>
+<td style="text-align: left;">-5.793611</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="odd">
@@ -798,7 +799,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">Forever They are saner than the dumbass democrats</td>
 <td style="text-align: left;">0.23</td>
 <td style="text-align: left;">12</td>
-<td style="text-align: left;">-5.7936114</td>
+<td style="text-align: left;">-5.793611</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="even">
@@ -812,7 +813,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">BETTER EDUCATION FOR MY KIDS BECAUSE REPUBLICANS THINK LIKE THE PEOPLE, THE RATS THINK ONLY FOR THEMSELVES!!</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">31</td>
-<td style="text-align: left;">-5.3763517</td>
+<td style="text-align: left;">-5.376352</td>
 <td style="text-align: left;">0.37</td>
 </tr>
 <tr class="odd">
@@ -826,7 +827,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">BETTER EDUCATION FOR MY KIDS BECAUSE REPUBLICANS THINK LIKE THE PEOPLE, THE RATS THINK ONLY FOR THEMSELVES!!</td>
 <td style="text-align: left;">0.22</td>
 <td style="text-align: left;">31</td>
-<td style="text-align: left;">-5.3763517</td>
+<td style="text-align: left;">-5.376352</td>
 <td style="text-align: left;">0.22</td>
 </tr>
 <tr class="even">
@@ -840,7 +841,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">I grew up there They are both controlled opposition run by AIPAC.</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">16</td>
-<td style="text-align: left;">-6.1120379</td>
+<td style="text-align: left;">-6.112038</td>
 <td style="text-align: left;">0.28</td>
 </tr>
 <tr class="odd">
@@ -854,7 +855,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">I grew up there They are both controlled opposition run by AIPAC.</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">16</td>
-<td style="text-align: left;">-6.1120379</td>
+<td style="text-align: left;">-6.112038</td>
 <td style="text-align: left;">0.25</td>
 </tr>
 <tr class="even">
@@ -868,7 +869,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">In my 20s, I thought of myself as a republican because I lied with the same beliefs. I took courses in college on government. I knew what I wanted. My parents list job in IL I wanna do something that will protect my children and my grandchildren and our beliefs lineup together to ensure they have a good life a safe life and be able to make decisions and have their voices heard</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">81</td>
-<td style="text-align: left;">-6.1898355</td>
+<td style="text-align: left;">-6.189836</td>
 <td style="text-align: left;">0.36</td>
 </tr>
 <tr class="odd">
@@ -882,7 +883,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">In my 20s, I thought of myself as a republican because I lied with the same beliefs. I took courses in college on government. I knew what I wanted. My parents list job in IL I wanna do something that will protect my children and my grandchildren and our beliefs lineup together to ensure they have a good life a safe life and be able to make decisions and have their voices heard</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">81</td>
-<td style="text-align: left;">-6.1898355</td>
+<td style="text-align: left;">-6.189836</td>
 <td style="text-align: left;">0.30</td>
 </tr>
 <tr class="even">
@@ -896,708 +897,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">In my 20s, I thought of myself as a republican because I lied with the same beliefs. I took courses in college on government. I knew what I wanted. My parents list job in IL I wanna do something that will protect my children and my grandchildren and our beliefs lineup together to ensure they have a good life a safe life and be able to make decisions and have their voices heard</td>
 <td style="text-align: left;">0.24</td>
 <td style="text-align: left;">81</td>
-<td style="text-align: left;">-6.1898355</td>
+<td style="text-align: left;">-6.189836</td>
 <td style="text-align: left;">0.24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">50</td>
-<td style="text-align: left;">US:101381879</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">I like it here</td>
-<td style="text-align: left;">0.63</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-0.6544364</td>
-<td style="text-align: left;">I like it here</td>
-<td style="text-align: left;">0.63</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-0.6544364</td>
-<td style="text-align: left;">0.63</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">51</td>
-<td style="text-align: left;">US:101433183</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">Because I never liked any of the Democrats</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">-3.3167180</td>
-<td style="text-align: left;">Because I never liked any of the Democrats Hometown</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.2530243</td>
-<td style="text-align: left;">0.26</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">52</td>
-<td style="text-align: left;">US:101433183</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Hometown</td>
-<td style="text-align: left;">0.50</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-1.3794802</td>
-<td style="text-align: left;">Because I never liked any of the Democrats Hometown</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.2530243</td>
-<td style="text-align: left;">0.37</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">53</td>
-<td style="text-align: left;">US:101445311</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Because it's beautiful</td>
-<td style="text-align: left;">0.25</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-3.6529056</td>
-<td style="text-align: left;">Because it's beautiful They align with my view.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.0114366</td>
-<td style="text-align: left;">0.24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">54</td>
-<td style="text-align: left;">US:101445311</td>
-<td style="text-align: left;">why_think_pid</td>
-<td style="text-align: left;">They align with my view.</td>
-<td style="text-align: left;">0.31</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">-2.8437361</td>
-<td style="text-align: left;">Because it's beautiful They align with my view.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.0114366</td>
-<td style="text-align: left;">0.27</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">55</td>
-<td style="text-align: left;">US:101523499</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">I have always been a democrat</td>
-<td style="text-align: left;">0.68</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">-0.4177826</td>
-<td style="text-align: left;">I have always been a democrat College They are for the good of all people not just the rich</td>
-<td style="text-align: left;">0.29</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-3.0561632</td>
-<td style="text-align: left;">0.48</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">56</td>
-<td style="text-align: left;">US:101523499</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">College</td>
-<td style="text-align: left;">0.25</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">-3.6536710</td>
-<td style="text-align: left;">I have always been a democrat College They are for the good of all people not just the rich</td>
-<td style="text-align: left;">0.29</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-3.0561632</td>
-<td style="text-align: left;">0.27</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">57</td>
-<td style="text-align: left;">US:101523499</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">They are for the good of all people not just the rich</td>
-<td style="text-align: left;">0.72</td>
-<td style="text-align: left;">12</td>
-<td style="text-align: left;">-0.2040295</td>
-<td style="text-align: left;">I have always been a democrat College They are for the good of all people not just the rich</td>
-<td style="text-align: left;">0.29</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-3.0561632</td>
-<td style="text-align: left;">0.50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">58</td>
-<td style="text-align: left;">US:101551735</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">From birth I've been close to the Republican Party.</td>
-<td style="text-align: left;">0.31</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-2.7762014</td>
-<td style="text-align: left;">From birth I've been close to the Republican Party. I agree with most of the stance of the Republican party except with respect to LGBT people.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">30</td>
-<td style="text-align: left;">-4.0847534</td>
-<td style="text-align: left;">0.27</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">59</td>
-<td style="text-align: left;">US:101551735</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">I agree with most of the stance of the Republican party except with respect to LGBT people.</td>
-<td style="text-align: left;">0.37</td>
-<td style="text-align: left;">18</td>
-<td style="text-align: left;">-2.2372224</td>
-<td style="text-align: left;">From birth I've been close to the Republican Party. I agree with most of the stance of the Republican party except with respect to LGBT people.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">30</td>
-<td style="text-align: left;">-4.0847534</td>
-<td style="text-align: left;">0.30</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">60</td>
-<td style="text-align: left;">US:1015933</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">I just stay away from politics</td>
-<td style="text-align: left;">0.35</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">-2.4153583</td>
-<td style="text-align: left;">I just stay away from politics came with my husband I dont care about politics</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-4.5645271</td>
-<td style="text-align: left;">0.28</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">61</td>
-<td style="text-align: left;">US:1015933</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">came with my husband</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-5.2904279</td>
-<td style="text-align: left;">I just stay away from politics came with my husband I dont care about politics</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-4.5645271</td>
-<td style="text-align: left;">0.22</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">62</td>
-<td style="text-align: left;">US:1015933</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">I dont care about politics</td>
-<td style="text-align: left;">0.43</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">-1.8315283</td>
-<td style="text-align: left;">I just stay away from politics came with my husband I dont care about politics</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-4.5645271</td>
-<td style="text-align: left;">0.32</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">63</td>
-<td style="text-align: left;">US:101669325</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">when I was 18</td>
-<td style="text-align: left;">0.54</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">-1.1701756</td>
-<td style="text-align: left;">when I was 18 I feel like I agree with what they stand for</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">-3.9384153</td>
-<td style="text-align: left;">0.39</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">64</td>
-<td style="text-align: left;">US:101669325</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">I feel like I agree with what they stand for</td>
-<td style="text-align: left;">0.30</td>
-<td style="text-align: left;">10</td>
-<td style="text-align: left;">-2.9220894</td>
-<td style="text-align: left;">when I was 18 I feel like I agree with what they stand for</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">-3.9384153</td>
-<td style="text-align: left;">0.27</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">65</td>
-<td style="text-align: left;">US:101683337</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">Because Democrats are for people.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">-4.6490703</td>
-<td style="text-align: left;">Because Democrats are for people. Born and raised here</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.3236449</td>
-<td style="text-align: left;">0.23</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">66</td>
-<td style="text-align: left;">US:101683337</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Born and raised here</td>
-<td style="text-align: left;">0.25</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-3.7521626</td>
-<td style="text-align: left;">Because Democrats are for people. Born and raised here</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-6.3236449</td>
-<td style="text-align: left;">0.24</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">67</td>
-<td style="text-align: left;">US:101755597</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Wanted a change</td>
-<td style="text-align: left;">0.47</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-1.5245432</td>
-<td style="text-align: left;">Wanted a change I'm for following the Constitution. I'm for DEI. I'm for protecting LGBTQ rights. I'm for due process for every person.</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">34</td>
-<td style="text-align: left;">-3.2343914</td>
-<td style="text-align: left;">0.38</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">68</td>
-<td style="text-align: left;">US:101755597</td>
-<td style="text-align: left;">why_think_pid</td>
-<td style="text-align: left;">I'm for following the Constitution. I'm for DEI. I'm for protecting LGBTQ rights. I'm for due process for every person.</td>
-<td style="text-align: left;">0.43</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">-1.7797044</td>
-<td style="text-align: left;">Wanted a change I'm for following the Constitution. I'm for DEI. I'm for protecting LGBTQ rights. I'm for due process for every person.</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">34</td>
-<td style="text-align: left;">-3.2343914</td>
-<td style="text-align: left;">0.36</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">69</td>
-<td style="text-align: left;">US:1017722</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">It’s the only option that represents science, kindness, understanding and rational thought.</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">16</td>
-<td style="text-align: left;">-3.4507113</td>
-<td style="text-align: left;">It’s the only option that represents science, kindness, understanding and rational thought. Affordable housing</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-5.1823458</td>
-<td style="text-align: left;">0.24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">70</td>
-<td style="text-align: left;">US:1017722</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Affordable housing</td>
-<td style="text-align: left;">0.52</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">-1.2582527</td>
-<td style="text-align: left;">It’s the only option that represents science, kindness, understanding and rational thought. Affordable housing</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-5.1823458</td>
-<td style="text-align: left;">0.37</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">71</td>
-<td style="text-align: left;">US:101792775</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">I believe in a women's right to chose and I believe in democracy</td>
-<td style="text-align: left;">0.53</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-1.1739711</td>
-<td style="text-align: left;">I believe in a women's right to chose and I believe in democracy</td>
-<td style="text-align: left;">0.53</td>
-<td style="text-align: left;">14</td>
-<td style="text-align: left;">-1.1739711</td>
-<td style="text-align: left;">0.53</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">72</td>
-<td style="text-align: left;">US:1019166</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">.what?</td>
-<td style="text-align: left;">0.31</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-7.2988584</td>
-<td style="text-align: left;">.what? Job</td>
-<td style="text-align: left;">0.61</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-9.3737031</td>
-<td style="text-align: left;">0.46</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">73</td>
-<td style="text-align: left;">US:1019166</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Job</td>
-<td style="text-align: left;">0.33</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">-2.6298002</td>
-<td style="text-align: left;">.what? Job</td>
-<td style="text-align: left;">0.61</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-9.3737031</td>
-<td style="text-align: left;">0.47</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">74</td>
-<td style="text-align: left;">US:101985793</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">Since birth - ha ha</td>
-<td style="text-align: left;">0.33</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">-7.5706183</td>
-<td style="text-align: left;">Since birth - ha ha Continue college I am for equal rights and protections for everyone, the rule of law, free trade, inclusion, voting rights, pro choice, democracy, separation of church and state, coequal branches of government, public education etc</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">52</td>
-<td style="text-align: left;">-6.7931919</td>
-<td style="text-align: left;">0.30</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">75</td>
-<td style="text-align: left;">US:101985793</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Continue college</td>
-<td style="text-align: left;">0.35</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-7.7453479</td>
-<td style="text-align: left;">Since birth - ha ha Continue college I am for equal rights and protections for everyone, the rule of law, free trade, inclusion, voting rights, pro choice, democracy, separation of church and state, coequal branches of government, public education etc</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">52</td>
-<td style="text-align: left;">-6.7931919</td>
-<td style="text-align: left;">0.31</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">76</td>
-<td style="text-align: left;">US:101985793</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">I am for equal rights and protections for everyone, the rule of law, free trade, inclusion, voting rights, pro choice, democracy, separation of church and state, coequal branches of government, public education etc</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">43</td>
-<td style="text-align: left;">-3.1649847</td>
-<td style="text-align: left;">Since birth - ha ha Continue college I am for equal rights and protections for everyone, the rule of law, free trade, inclusion, voting rights, pro choice, democracy, separation of church and state, coequal branches of government, public education etc</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">52</td>
-<td style="text-align: left;">-6.7931919</td>
-<td style="text-align: left;">0.28</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">77</td>
-<td style="text-align: left;">US:102011707</td>
-<td style="text-align: left;">when_decided_pid</td>
-<td style="text-align: left;">1998</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-3.5757085</td>
-<td style="text-align: left;">1998 Republicans would rather play games than do what they promised when i joined. Democrats do not keep their promises. military</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">26</td>
-<td style="text-align: left;">-6.8900816</td>
-<td style="text-align: left;">0.26</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">78</td>
-<td style="text-align: left;">US:102011707</td>
-<td style="text-align: left;">why_are_pid_with_when</td>
-<td style="text-align: left;">Republicans would rather play games than do what they promised when i joined. Democrats do not keep their promises.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">21</td>
-<td style="text-align: left;">-4.4319135</td>
-<td style="text-align: left;">1998 Republicans would rather play games than do what they promised when i joined. Democrats do not keep their promises. military</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">26</td>
-<td style="text-align: left;">-6.8900816</td>
-<td style="text-align: left;">0.25</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">79</td>
-<td style="text-align: left;">US:102011707</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">military</td>
-<td style="text-align: left;">0.36</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-2.3319677</td>
-<td style="text-align: left;">1998 Republicans would rather play games than do what they promised when i joined. Democrats do not keep their promises. military</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">26</td>
-<td style="text-align: left;">-6.8900816</td>
-<td style="text-align: left;">0.32</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">80</td>
-<td style="text-align: left;">US:102088179</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">I feel they have similar thoughts and value as I do.</td>
-<td style="text-align: left;">0.43</td>
-<td style="text-align: left;">12</td>
-<td style="text-align: left;">-1.8117181</td>
-<td style="text-align: left;">I feel they have similar thoughts and value as I do. Be closer to family</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-4.5624282</td>
-<td style="text-align: left;">0.32</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">81</td>
-<td style="text-align: left;">US:102088179</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Be closer to family</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-4.3338823</td>
-<td style="text-align: left;">I feel they have similar thoughts and value as I do. Be closer to family</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-4.5624282</td>
-<td style="text-align: left;">0.22</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">82</td>
-<td style="text-align: left;">US:1021053</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">All my life JFK</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-5.5689609</td>
-<td style="text-align: left;">All my life JFK Fun Fairness and caring</td>
-<td style="text-align: left;">0.38</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-7.9810095</td>
-<td style="text-align: left;">0.30</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">83</td>
-<td style="text-align: left;">US:1021053</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Fun</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">-3.8218236</td>
-<td style="text-align: left;">All my life JFK Fun Fairness and caring</td>
-<td style="text-align: left;">0.38</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-7.9810095</td>
-<td style="text-align: left;">0.31</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">84</td>
-<td style="text-align: left;">US:1021053</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">Fairness and caring</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">-4.0058063</td>
-<td style="text-align: left;">All my life JFK Fun Fairness and caring</td>
-<td style="text-align: left;">0.38</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-7.9810095</td>
-<td style="text-align: left;">0.31</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">85</td>
-<td style="text-align: left;">US:102152019</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">Because of the people where we live are</td>
-<td style="text-align: left;">0.30</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">-2.9588209</td>
-<td style="text-align: left;">Because of the people where we live are Where we lived in Phila was getting terrible.</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-6.2148701</td>
-<td style="text-align: left;">0.27</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">86</td>
-<td style="text-align: left;">US:102152019</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Where we lived in Phila was getting terrible.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">10</td>
-<td style="text-align: left;">-4.6619085</td>
-<td style="text-align: left;">Because of the people where we live are Where we lived in Phila was getting terrible.</td>
-<td style="text-align: left;">0.24</td>
-<td style="text-align: left;">19</td>
-<td style="text-align: left;">-6.2148701</td>
-<td style="text-align: left;">0.23</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">87</td>
-<td style="text-align: left;">US:102156373</td>
-<td style="text-align: left;">why_are_pid_with_when</td>
-<td style="text-align: left;">i9</td>
-<td style="text-align: left;">0.27</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">-3.4075648</td>
-<td style="text-align: left;">i9 Pops bought a fam</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">-7.0183765</td>
-<td style="text-align: left;">0.28</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">88</td>
-<td style="text-align: left;">US:102156373</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Pops bought a fam</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">-4.9886282</td>
-<td style="text-align: left;">i9 Pops bought a fam</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">8</td>
-<td style="text-align: left;">-7.0183765</td>
-<td style="text-align: left;">0.25</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">89</td>
-<td style="text-align: left;">US:102175907</td>
-<td style="text-align: left;">why_are_pid</td>
-<td style="text-align: left;">Don't give away as much as democrats</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">9</td>
-<td style="text-align: left;">-4.1966795</td>
-<td style="text-align: left;">Don't give away as much as democrats Higher paying job</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-6.6758920</td>
-<td style="text-align: left;">0.24</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">90</td>
-<td style="text-align: left;">US:102175907</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Higher paying job</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">-3.4813719</td>
-<td style="text-align: left;">Don't give away as much as democrats Higher paying job</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">13</td>
-<td style="text-align: left;">-6.6758920</td>
-<td style="text-align: left;">0.26</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">91</td>
-<td style="text-align: left;">US:1022013</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">The first time I voted when I was 18.</td>
-<td style="text-align: left;">0.54</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-1.1251830</td>
-<td style="text-align: left;">The first time I voted when I was 18. Family Republicans are more in line politically with my views.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">-5.3068972</td>
-<td style="text-align: left;">0.38</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">92</td>
-<td style="text-align: left;">US:1022013</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Family</td>
-<td style="text-align: left;">0.25</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">-3.7675181</td>
-<td style="text-align: left;">The first time I voted when I was 18. Family Republicans are more in line politically with my views.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">-5.3068972</td>
-<td style="text-align: left;">0.23</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">93</td>
-<td style="text-align: left;">US:1022013</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">Republicans are more in line politically with my views.</td>
-<td style="text-align: left;">0.29</td>
-<td style="text-align: left;">10</td>
-<td style="text-align: left;">-3.0768572</td>
-<td style="text-align: left;">The first time I voted when I was 18. Family Republicans are more in line politically with my views.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">24</td>
-<td style="text-align: left;">-5.3068972</td>
-<td style="text-align: left;">0.26</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">94</td>
-<td style="text-align: left;">US:102291189</td>
-<td style="text-align: left;">when_decided_pid</td>
-<td style="text-align: left;">many years ago, as i believe in freedom of speech and protecting programs that help people</td>
-<td style="text-align: left;">0.26</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">-3.5540085</td>
-<td style="text-align: left;">many years ago, as i believe in freedom of speech and protecting programs that help people To protect freedom of speech and our rights as a democracy</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">-4.3020280</td>
-<td style="text-align: left;">0.24</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">95</td>
-<td style="text-align: left;">US:102291189</td>
-<td style="text-align: left;">why_are_pid_with_when</td>
-<td style="text-align: left;">To protect freedom of speech and our rights as a democracy</td>
-<td style="text-align: left;">0.45</td>
-<td style="text-align: left;">11</td>
-<td style="text-align: left;">-1.6456839</td>
-<td style="text-align: left;">many years ago, as i believe in freedom of speech and protecting programs that help people To protect freedom of speech and our rights as a democracy</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">29</td>
-<td style="text-align: left;">-4.3020280</td>
-<td style="text-align: left;">0.34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">96</td>
-<td style="text-align: left;">US:102359727</td>
-<td style="text-align: left;">when_think_pid</td>
-<td style="text-align: left;">Elementary school- 1970 or so.</td>
-<td style="text-align: left;">0.29</td>
-<td style="text-align: left;">10</td>
-<td style="text-align: left;">-3.0975839</td>
-<td style="text-align: left;">Elementary school- 1970 or so. Weather I believe that the government can be a force for good and that we should build a caring, inclusive society.</td>
-<td style="text-align: left;">0.32</td>
-<td style="text-align: left;">35</td>
-<td style="text-align: left;">-2.6936439</td>
-<td style="text-align: left;">0.30</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">97</td>
-<td style="text-align: left;">US:102359727</td>
-<td style="text-align: left;">why_moved_to_current_state</td>
-<td style="text-align: left;">Weather</td>
-<td style="text-align: left;">0.28</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">-3.2508494</td>
-<td style="text-align: left;">Elementary school- 1970 or so. Weather I believe that the government can be a force for good and that we should build a caring, inclusive society.</td>
-<td style="text-align: left;">0.32</td>
-<td style="text-align: left;">35</td>
-<td style="text-align: left;">-2.6936439</td>
-<td style="text-align: left;">0.30</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">98</td>
-<td style="text-align: left;">US:102359727</td>
-<td style="text-align: left;">why_think_pid_with_when</td>
-<td style="text-align: left;">I believe that the government can be a force for good and that we should build a caring, inclusive society.</td>
-<td style="text-align: left;">0.91</td>
-<td style="text-align: left;">22</td>
-<td style="text-align: left;">1.1417372</td>
-<td style="text-align: left;">Elementary school- 1970 or so. Weather I believe that the government can be a force for good and that we should build a caring, inclusive society.</td>
-<td style="text-align: left;">0.32</td>
-<td style="text-align: left;">35</td>
-<td style="text-align: left;">-2.6936439</td>
-<td style="text-align: left;">0.62</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">99</td>
-<td style="text-align: left;">US:102378245</td>
-<td style="text-align: left;">when_decided_pid</td>
-<td style="text-align: left;">I voted for President Obama both times, but it wasn’t until Republicans ran Trump for POTUS in 2016 that I realized I was no longer a Republican. Trump was such a poor choice - a man with low values and meals, unintelligent and uninterested in politics. The entire Republican Party let me down with the appalling choices they have made this entire century, and even before, maybe back to Nixon and Reagan.</td>
-<td style="text-align: left;">0.23</td>
-<td style="text-align: left;">85</td>
-<td style="text-align: left;">-4.1591152</td>
-<td style="text-align: left;">I voted for President Obama both times, but it wasn’t until Republicans ran Trump for POTUS in 2016 that I realized I was no longer a Republican. Trump was such a poor choice - a man with low values and meals, unintelligent and uninterested in politics. The entire Republican Party let me down with the appalling choices they have made this entire century, and even before, maybe back to Nixon and Reagan. My daughter moved here for a better job opportunity.</td>
-<td style="text-align: left;">0.22</td>
-<td style="text-align: left;">96</td>
-<td style="text-align: left;">-5.2101286</td>
-<td style="text-align: left;">0.22</td>
 </tr>
 </tbody>
 </table>
@@ -1605,6 +906,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </div>
+</div>
+</section>
+<section id="citation" class="level3">
+<h3 class="anchored" data-anchor-id="citation">Citation</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @articles{bao2025glimpse,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'   title={Glimpse: Enabling White-Box Methods to Use Proprietary Models for Zero-Shot LLM-Generated Text Detection},</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'   author={Bao, Guangsheng and Zhao, Yanbin and He, Juncai and Zhang, Yue},</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'   booktitle={The Thirteenth International Conference on Learning Representations},</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'   year={2025}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

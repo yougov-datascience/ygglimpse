@@ -15,11 +15,11 @@ Zero shot models for LLM text detection are an attempt to produce clear, quantif
 
 "Glimpse serves as a bridge between white-box methods, which rely on local LLMs for scoring, and proprietary LLMs. It estimates full distributions based on partial observations from API-based models. Our empirical analysis demonstrates that detection methods leveraging these estimated distributions **achieve detection accuracies comparable to those obtained using real distributions**."
 
-At YouGov panelists are compensated for their honest participation in our surveys. As a result, it is in our best interest to explore and develop as many tools as possible for intercepting fraudulent behavior. Here we explore the Glimpse package (Bao, et al., 2025) as another facet in YouGov's fraud defense.
+In short, methods such as Entropy, Rank, Log-Rank, and Fast-DetectGPT are passed to proprietary models in order to detect the probability that the LLM itself would generate a given response (Bao, et al. 2025).
 
 ## Methodology
 
-All modifications to the base Glimpse package have been related to input and output of large datasets. The base Glimpse model has not currently be altered and full explaination (whitebox) of the Glimpse methodology can be found in Bao, et al. 2025.
+All modifications to the base Glimpse package have been related to input and output of large datasets. The base Glimpse model has not been altered and a full explanation of the Glimpse methodology can be found in Bao, et al. 2025.
 
 The Davinci-002 LLM model from OpenAI is used with the following settings provided to Glimpse:
 
@@ -75,7 +75,9 @@ After two rounds of `local_batch_infer.py`, the final output is saved to `r_src/
 
 ## Results
 
-Looking at the distribution of `final_score` we see and average of .30 (30%) chance of machine generation across all participants that responded at least once. 99.5% of all participants have a less than 75% chance of being machine generated, indicating a low incidence rate of machine generation responses during this wave.
+Looking at the distribution of `final_score` we see and average of .30 (30%) chance of machine generation across all participants that responded at least once. 99.5% of all participants have a less than 75% chance of being machine generated, indicating a low incidence rate of machine generation responses during this wave. Considering the possibility that some participants are well articulated\* enough to create false positives for this approach, we can infer that we are within the bounds of low fraud risk for this wave.
+
+\* The model is based on tokenization probabilities, not the grammar used by the respondent. There is a correlation between these
 
 #### Histogram
 
@@ -185,11 +187,11 @@ ggplot(final_unique, aes(x = final_score)) +
 
 #### Output Table Preview 
 
-This table contains the first 100 rows of the final output table (n = 12288).
+This table contains the first 50 rows of the final output table (n = 12288 responses).
 
 ```{r table, warning=F,message=F,echo=F}
 
-head(final, n = 100) |>
+head(final, n = 50) |>
   kable(
     format = "html",
     align = c("l"),
@@ -200,4 +202,15 @@ head(final, n = 100) |>
     bootstrap_options = c("striped", "hover", "responsive"),
     full_width = FALSE
   )
+```
+
+### Citation
+
+```{r citation}
+#' @articles{bao2025glimpse,
+#'   title={Glimpse: Enabling White-Box Methods to Use Proprietary Models for Zero-Shot LLM-Generated Text Detection},
+#'   author={Bao, Guangsheng and Zhao, Yanbin and He, Juncai and Zhang, Yue},
+#'   booktitle={The Thirteenth International Conference on Learning Representations},
+#'   year={2025}
+#' }
 ```
